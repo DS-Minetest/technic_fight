@@ -10,7 +10,7 @@ _/ ___\\__  \  /    \ /    \ /  _ \ /    \
 local poweruse = 5000
 local range = 20
 local speed = 20
-local max_charge = 100000
+local max_charge = 150000
 
 local particletime = range / speed + 0.1
 
@@ -32,7 +32,7 @@ technic.register_power_tool("technic_fight:cannon", max_charge)
 
 minetest.register_tool("technic_fight:cannon", {
 	description = "Cannon",
-	inventory_image = "technic_mining_laser_mk1.png",
+	inventory_image = "technic_fight_cannon.png",
 	wear_represents = "technic_RE_charge",
 	on_refill = technic.refill_RE_charge,
 	on_use = function(itemstack, user)
@@ -53,7 +53,7 @@ minetest.register_tool("technic_fight:cannon", {
 				collisiondetection = true,
 				collision_removal = true,
 				vertical = false,
-				texture = "technic_laser_beam_mk1.png^[transform"..math.random(0, 7),
+				texture = "technic_fight_cannon_shoot.png^[transform"..math.random(0, 7),
 				--~ animation = {Tile Animation definition},
 				glow = 10
 			})
@@ -67,4 +67,13 @@ minetest.register_tool("technic_fight:cannon", {
 		end
 		return itemstack
 	end,
+})
+
+minetest.register_craft({
+	output = "technic_fight:cannon",
+	recipe = {
+		{"default:mese_crystal", "technic:stainless_steel_ingot", "default:glass"},
+		{"",                     "technic:stainless_steel_ingot", "technic:green_energy_crystal"},
+		{"",                     "",                              "default:bronze_ingot"},
+	}
 })
