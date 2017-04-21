@@ -1,0 +1,1 @@
+This mod aim to add useful technical items for fighting in survival or something like that.

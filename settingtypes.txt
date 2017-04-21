@@ -1,0 +1,2 @@
+#Disable handfire weapon
+technic_fight_disable_cannon (Disables the handfire weapon.) bool false
