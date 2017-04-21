@@ -57,7 +57,7 @@ minetest.register_tool("technic_fight:cannon", {
 				--~ animation = {Tile Animation definition},
 				glow = 10
 			})
-			minetest.sound_play("technic_laser_mk1", {pos = look_pos, max_hear_distance = 15})
+			minetest.sound_play("technic_fight_cannon", {pos = look_pos, max_hear_distance = 15})
 			shoot_fly(look_pos, vector.add(look_pos, vector.multiply(look_dir, range)), true)
 			if not technic.creative_mode then
 				meta.charge = meta.charge - poweruse

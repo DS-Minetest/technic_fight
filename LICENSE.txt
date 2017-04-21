@@ -1,1 +1,9 @@
+Shoot sound(s):
 CC0
+http://www.freesound.org/people/klangfabrik/sounds/232936/
+
+Everything else:
+by DS-minetest (CC0)
+
+
+CC0: https://creativecommons.org/publicdomain/zero/1.0/
