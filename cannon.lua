@@ -9,8 +9,24 @@ _/ ___\\__  \  /    \ /    \ /  _ \ /    \
 
 local poweruse = 5000
 local range = 20
-local speed = 10
+local speed = 20
 local max_charge = 100000
+
+local particletime = range / speed + 0.1
+
+local function shoot_fly(pos, endpos, first)
+	if not (first or minetest.get_node(pos) == "air") then
+		tnt.boom(pos, {damage_radius = 3, radius = 2})
+		return
+	end
+	local b, node_pos = minetest.line_of_sight(pos, endpos, 1)
+	if b then
+		return
+	end
+	-- x(t)=x(0)+t*v => t*v=x(t)-x(0) => t=(x(t)-x(0))/v
+	minetest.after(vector.length(vector.subtract(node_pos, pos)) / speed,
+			shoot_fly, node_pos, endpos, false)
+end
 
 technic.register_power_tool("technic_fight:cannon", max_charge)
 
@@ -28,13 +44,11 @@ minetest.register_tool("technic_fight:cannon", {
 			local look_dir = user:get_look_dir()
 			local look_pos = vector.add(user:get_pos(), vector.divide(user:get_eye_offset(), 10))
 			look_pos.y = look_pos.y + 1.625
-			local b, node_pos = minetest.line_of_sight(look_pos,
-					vector.add(look_pos, vector.multiply(look_dir, range)), 1)
 			minetest.add_particle({
 				pos = look_pos,
 				velocity = vector.multiply(look_dir, speed),
 				acceleration = {x=0, y=0, z=0},
-				expirationtime = 5,
+				expirationtime = particletime,
 				size = 8,
 				collisiondetection = true,
 				collision_removal = true,
@@ -44,11 +58,7 @@ minetest.register_tool("technic_fight:cannon", {
 				glow = 10
 			})
 			minetest.sound_play("technic_laser_mk1", {pos = look_pos, max_hear_distance = 15})
-			if not b then
-				-- x(t)=x(0)+t*v => t*v=x(t)-x(0) => t=(x(t)-x(0))/v
-				minetest.after(vector.length(vector.divide(vector.subtract(node_pos, look_pos), speed)),
-						tnt.boom, node_pos, {damage_radius = 3, radius = 2})
-			end
+			shoot_fly(look_pos, vector.add(look_pos, vector.multiply(look_dir, range)), true)
 			if not technic.creative_mode then
 				meta.charge = meta.charge - poweruse
 				technic.set_RE_wear(itemstack, meta.charge, max_charge)
